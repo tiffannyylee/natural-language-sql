@@ -192,12 +192,14 @@ if __name__ == "__main__":
     client = OpenAI()
 
     questions = [
-        "What are Maria's most common symptoms during her period?",
-        "Which user has the highest average cramp severity?",
-        "What mood does Lena most often feel the day before her period starts?",
-        "How many times has Priya taken ibuprofen, and what was the highest dose?",
-        "Show me all symptoms Priya logged with severity 7 or higher",
-        "What is the average cycle length for each user?",
+        # "What are Maria's most common symptoms during her period?",
+        # "Which user has the highest average cramp severity?",
+        # "What mood does Lena most often feel the day before her period starts?",
+        # "How many times has Priya taken ibuprofen, and what was the highest dose?",
+        # "Show me all symptoms Priya logged with severity 7 or higher",
+        # "What is the average cycle length for each user?",
+        "What supplements does Maria take on which days?",
+        "Which symptoms does Priya log most?",
     ]
 
     for q in questions:
