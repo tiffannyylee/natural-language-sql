@@ -109,7 +109,7 @@ def get_sql_from_gpt(client, question):
                 "content": (
                     "You are a SQL expert for a women's health symptom tracking app called Herra. "
                     "Given a natural language question, generate a valid SQLite SELECT query to answer it. "
-                    "Return ONLY the raw SQL query, no markdown, no explanation, no code fences. "
+                    "Return ONLY the raw SQL query, no markdown, no explanation. "
                     "IMPORTANT RULES:\n"
                     "- users.name stores FULL names (e.g. 'Maria Santos'). When filtering by name, use LIKE with a wildcard: u.name LIKE 'Maria%'\n"
                     "- All string comparisons should be case-insensitive. Use LOWER() on both sides, e.g. LOWER(s.name) = LOWER('Cramps')\n"
@@ -166,11 +166,9 @@ def ask_herra(conn, client, question):
     print(f"Question: {question}")
     print(f"{'='*60}")
 
-    # Step 1: Get SQL from GPT
     sql = get_sql_from_gpt(client, question)
     print(f"\nGenerated SQL:\n  {sql}")
 
-    # Step 2: Execute the SQL
     try:
         columns, rows = run_query(conn, sql)
         print(f"\nQuery Results:")
@@ -182,7 +180,6 @@ def ask_herra(conn, client, question):
         print("The generated query failed to execute.")
         return
 
-    # Step 3: Get friendly response from GPT
     friendly = get_friendly_response(client, question, columns, rows, sql)
     print(f"\nHerra says:\n  {friendly}")
 
