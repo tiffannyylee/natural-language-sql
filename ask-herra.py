@@ -110,6 +110,10 @@ def get_sql_from_gpt(client, question):
                     "You are a SQL expert for a women's health symptom tracking app called Herra. "
                     "Given a natural language question, generate a valid SQLite SELECT query to answer it. "
                     "Return ONLY the raw SQL query, no markdown, no explanation, no code fences. "
+                    "IMPORTANT RULES:\n"
+                    "- users.name stores FULL names (e.g. 'Maria Santos'). When filtering by name, use LIKE with a wildcard: u.name LIKE 'Maria%'\n"
+                    "- All string comparisons should be case-insensitive. Use LOWER() on both sides, e.g. LOWER(s.name) = LOWER('Cramps')\n"
+                    "- 'Cycle length' means the number of days between one cycle's start_date and the next cycle's start_date for the same user, NOT end_date - start_date (that is period duration).\n"
                     "Here is the database schema:\n\n" + SCHEMA
                 ),
             },
