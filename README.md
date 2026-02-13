@@ -7,15 +7,13 @@ Herra is a women's health tracking database that stores data about menstrual cyc
 
 ## Prompting Strategies
 
-The system uses a **zero-shot** approach — the full database schema is included in the system prompt, and questions are sent directly with no example SQL pairs. GPT is instructed to return only raw SQL with no markdown or explanation.
+For most of it, I used a zero-shot approach with the full database schema included in the system prompt, and questions are sent directly with no example SQL pairs. GPT is instructed to return only raw SQL with no markdown or explanation.
 
-I also tried a **few-shot** approach by including 2-3 example question/SQL pairs in the system prompt. The few-shot strategy produced slightly more accurate queries for complex questions (like date arithmetic or multi-join queries), but for straightforward questions the zero-shot approach worked just as well. The few-shot approach was noticeably better at handling SQLite-specific functions like `JULIANDAY()` since it could learn the syntax from the examples.
+I also tried a few-shot approach by including 2-3 example question/SQL pairs in the system prompt. The few-shot strategy produced slightly more accurate queries for complex questions like doing any type of math or multiple joins etc., but for straightforward questions the zero-shot approach worked just as well. The few-shot approach was noticeably better at handling SQLite-specific functions like `JULIANDAY()` since it could learn the syntax from the examples.
 
 ## Sample Questions
 
 ### Correct Response
-Strategy: zero-shot<br/>
-Model: gpt-4o
 
 Question:<br/>
 What is the average cycle length for each user?
@@ -50,9 +48,6 @@ Remember, every body is different, and having accurate records can really help i
 ### Incorrect Response
 This query returned no results because the SQL that was generated was just matching on the first name, when it needed to do the full name. I added that into the prompt later and got a successful response.
 
-Strategy: zero-shot<br/>
-Model: gpt-4o
-
 Question:<br/>
 What mood does Lena most often feel the day before her period starts?
 
@@ -83,9 +78,6 @@ If Lena has noticed any particular mood changes or patterns that concern her, it
 ### More Examples
 
 #### Example 1
-Strategy: zero-shot<br/>
-Model: gpt-4o
-
 Question:<br/>
 What are Maria's most common symptoms during her period?
 
@@ -123,9 +115,6 @@ Remember, everyone's experience is unique, and tracking symptoms can be a great 
 Take care, and feel free to reach out if you have more questions or need further assistance!
 
 #### Example 2
-Strategy: zero-shot<br/>
-Model: gpt-4o
-
 Question:<br/>
 Which user has the highest average cramp severity?
 
@@ -154,9 +143,6 @@ If the cramps are moderate to severe, it could be a good idea to discuss this wi
 Remember, you're not alone, and there's support available to help you manage how you're feeling. Let me know if there's anything else you’d like to know! 😊
 
 #### Example 3
-Strategy: zero-shot<br/>
-Model: gpt-4o
-
 Question:<br/>
 How many times has Priya taken ibuprofen, and what was the highest dose?
 
@@ -186,9 +172,6 @@ If you find yourself needing to take it frequently or in higher doses, it might 
 
 If you have more questions or need further help, feel free to reach out. Take care! 🌼
 #### Example 4
-Strategy: zero-shot<br/>
-Model: gpt-4o
-
 Question:<br/>
 Show me all symptoms Priya logged with severity 7 or higher
 
@@ -227,9 +210,6 @@ It seems like these symptoms, particularly cramps and fatigue, are quite intense
 
 Remember, you're doing great by keeping track of your symptoms, and this information is valuable in managing your health. If you have more questions or need further insights, feel free to reach out! 😊
 #### Example 5
-Strategy: zero-shot<br/>
-Model: gpt-4o
-
 Question:<br/>
 What supplements does Maria take on which days?
 
@@ -258,9 +238,6 @@ If you’re using Magnesium for a specific reason, or if you have any questions 
 Feel free to reach out if you have more questions or need further assistance! 😊
 
 #### Example 6
-Strategy: zero-shot<br/>
-Model: gpt-4o
-
 Question:<br/>
 Which symptoms does Priya log most?
 
