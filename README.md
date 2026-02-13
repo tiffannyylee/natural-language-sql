@@ -48,7 +48,7 @@ If these average lengths seem different from what you were expecting, or if they
 Remember, every body is different, and having accurate records can really help in understanding your body's patterns better. If you have any more questions or need further clarity, feel free to ask. Take care!
 
 ### Incorrect Response
-This query returned no results because Lena may not have logged her mood on the exact day before her period started. The SQL logic is technically correct (using `DATE(c.start_date, '-1 day')`), but the seed data doesn't have mood entries that line up with exactly one day before a cycle start date.
+This query returned no results because the SQL that was generated was just matching on the first name, when it needed to do the full name. I added that into the prompt later and got a successful response.
 
 Strategy: zero-shot<br/>
 Model: gpt-4o
@@ -91,14 +91,36 @@ What are Maria's most common symptoms during her period?
 
 Generated SQL:
 ```sqlite
--- TODO: paste generated SQL here
+  SELECT s.name, COUNT(sl.id) AS frequency
+FROM symptom_logs sl
+JOIN symptoms s ON sl.symptom_id = s.id
+JOIN users u ON sl.user_id = u.id
+JOIN cycles c ON sl.user_id = c.user_id AND sl.log_date BETWEEN c.start_date AND c.end_date
+WHERE u.name LIKE 'Maria%'
+GROUP BY s.name
+ORDER BY frequency DESC;
 ```
 
 Query Results:<br/>
-<!-- TODO: paste results here -->
-
+  Columns: ['name', 'frequency']
+  ('Cramps', 4)
+  ('Fatigue', 4)
+  ('Back pain', 3)
+  ('Headache', 2)
+  ('Nausea', 1)
+  
 Herra says:<br/>
-<!-- TODO: paste response here -->
+  Hello there! It looks like we've got some insights into Maria's most common symptoms during her period. Here's what the data reveals:
+
+- **Cramps** and **Fatigue** are the most frequently logged symptoms, both occurring 4 times. This suggests that these might be the most bothersome or noticeable symptoms for Maria during her period.
+- **Back pain** follows closely, with 3 occurrences, indicating it's also a significant symptom for her.
+- **Headache** and **Nausea** were logged less frequently, with 2 and 1 occurrences respectively, but they still contribute to how Maria experiences her period.
+
+It seems like Maria experiences a mix of physical discomforts, which is quite common during periods. If these symptoms are particularly bothersome, it might be a good idea for Maria to discuss them with her healthcare provider. They can offer advice on how to manage these symptoms effectively.
+
+Remember, everyone's experience is unique, and tracking symptoms can be a great way to highlight patterns and help in managing them better. If Maria continues to log her symptoms, over time, she might notice other patterns or triggers that can be addressed. 
+
+Take care, and feel free to reach out if you have more questions or need further assistance!
 
 #### Example 2
 Strategy: zero-shot<br/>
@@ -109,14 +131,27 @@ Which user has the highest average cramp severity?
 
 Generated SQL:
 ```sqlite
--- TODO: paste generated SQL here
+  SELECT u.name
+FROM users u
+JOIN symptom_logs sl ON u.id = sl.user_id
+JOIN symptoms s ON sl.symptom_id = s.id
+WHERE LOWER(s.name) = LOWER('Cramps')
+GROUP BY u.id
+ORDER BY AVG(sl.severity) DESC
+LIMIT 1;
 ```
 
 Query Results:<br/>
-<!-- TODO: paste results here -->
-
+  Columns: ['name']
+  ('Maria Santos',)
 Herra says:<br/>
-<!-- TODO: paste response here -->
+  Hi there! It looks like Maria Santos has the highest average cramp severity among users. This means that out of everyone using the app, Maria has been experiencing more intense cramps on average.
+
+If you’re Maria or if you know her, it might be worthwhile to pay attention to patterns around when the cramps occur. Are they linked to specific times in the menstrual cycle, certain foods, or stress levels? Keeping a detailed symptom log can be very helpful.
+
+If the cramps are moderate to severe, it could be a good idea to discuss this with a healthcare provider. They can help explore possible underlying causes and provide options for relief or management.
+
+Remember, you're not alone, and there's support available to help you manage how you're feeling. Let me know if there's anything else you’d like to know! 😊
 
 #### Example 3
 Strategy: zero-shot<br/>
@@ -127,15 +162,29 @@ How many times has Priya taken ibuprofen, and what was the highest dose?
 
 Generated SQL:
 ```sqlite
--- TODO: paste generated SQL here
+  SELECT COUNT(ml.id) AS times_taken, MAX(ml.dosage) AS highest_dose
+FROM medication_logs ml
+JOIN users u ON ml.user_id = u.id
+JOIN medications m ON ml.medication_id = m.id
+WHERE LOWER(m.name) = LOWER('ibuprofen') AND u.name LIKE 'Priya%';
 ```
 
 Query Results:<br/>
-<!-- TODO: paste results here -->
-
+  Columns: ['times_taken', 'highest_dose']
+  (6, '800mg')
 Herra says:<br/>
-<!-- TODO: paste response here -->
+  Hi Priya! 😊
 
+I looked into your question about the times you've taken ibuprofen and the highest dose you've had. Here's what I found:
+
+- You've taken ibuprofen **6 times**.
+- The highest dose you've recorded is **800mg**.
+
+It’s great that you’re keeping track of your medication. This can be super helpful for understanding how certain doses might affect you. Remember, while ibuprofen can help with pain or inflammation, it’s always good to stick to the recommended guidelines unless advised otherwise by a healthcare professional.
+
+If you find yourself needing to take it frequently or in higher doses, it might be worth discussing this with your doctor. They can offer guidance tailored to your needs and help ensure you're managing your symptoms in the best way possible. 😊
+
+If you have more questions or need further help, feel free to reach out. Take care! 🌼
 #### Example 4
 Strategy: zero-shot<br/>
 Model: gpt-4o
@@ -145,15 +194,38 @@ Show me all symptoms Priya logged with severity 7 or higher
 
 Generated SQL:
 ```sqlite
--- TODO: paste generated SQL here
+  SELECT s.name, sl.severity, sl.log_date
+FROM symptom_logs sl
+JOIN users u ON sl.user_id = u.id
+JOIN symptoms s ON sl.symptom_id = s.id
+WHERE u.name LIKE 'Priya%' AND sl.severity >= 7;
 ```
 
 Query Results:<br/>
-<!-- TODO: paste results here -->
-
+  Columns: ['name', 'severity', 'log_date']
+  ('Cramps', 8, '2025-10-10')
+  ('Cramps', 7, '2025-10-11')
+  ('Fatigue', 7, '2025-10-10')
+  ('Back pain', 8, '2025-10-11')
+  ('Cramps', 9, '2025-11-11')
+  ('Fatigue', 8, '2025-11-11')
+  ('Back pain', 7, '2025-11-12')
+  ('Mood swings', 7, '2025-11-10')
+  ('Cramps', 8, '2026-01-14')
+  ('Cramps', 7, '2026-01-15')
+  ('Fatigue', 7, '2026-01-14')
+  ('Back pain', 8, '2026-01-15')
 Herra says:<br/>
-<!-- TODO: paste response here -->
+  Hi Priya! I took a look at the symptoms you've logged with a severity of 7 or higher. Here's a little summary for you:
 
+- **Cramps** seem to be a recurring issue, with quite high severity scores. You've logged them several times, peaking at a severity of 9 on November 11, 2025.
+- **Fatigue** also appears consistently, with scores of 7 and 8, which suggests it's been quite bothersome for you.
+- **Back pain** has been logged a few times too, with severity reaching up to 8.
+- You noted **mood swings** with a severity of 7 on November 10, 2025.
+
+It seems like these symptoms, particularly cramps and fatigue, are quite intense at times. If you find that they're impacting your daily life, it might be worth discussing them with your doctor. They can help you explore potential underlying causes or treatment options to manage these symptoms better.
+
+Remember, you're doing great by keeping track of your symptoms, and this information is valuable in managing your health. If you have more questions or need further insights, feel free to reach out! 😊
 #### Example 5
 Strategy: zero-shot<br/>
 Model: gpt-4o
