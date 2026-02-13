@@ -47,9 +47,7 @@ INSERT INTO medications (name, type) VALUES
     ('Evening primrose oil', 'supplement'),
     ('Acetaminophen', 'painkiller');
 
--- ============================================================
 -- Maria Santos - Cycle and symptom data (roughly 28-day cycles)
--- ============================================================
 
 -- Maria's cycles
 INSERT INTO cycles (user_id, start_date, end_date, flow_level, notes) VALUES
@@ -119,9 +117,7 @@ INSERT INTO medication_logs (user_id, medication_id, log_date, dosage, notes) VA
     (1, 5, '2025-11-28', '400mg', NULL),
     (1, 1, '2026-01-23', '400mg', NULL);
 
--- ============================================================
 -- Lena Kim - Cycle and symptom data (shorter cycles ~25 days)
--- ============================================================
 
 -- Lena's cycles
 INSERT INTO cycles (user_id, start_date, end_date, flow_level, notes) VALUES
@@ -182,9 +178,7 @@ INSERT INTO medication_logs (user_id, medication_id, log_date, dosage, notes) VA
     (2, 7, '2025-12-16', '1000mg', NULL),
     (2, 8, '2026-01-13', '500mg', NULL);
 
--- ============================================================
 -- Priya Patel - Cycle and symptom data (longer cycles ~32 days)
--- ============================================================
 
 -- Priya's cycles
 INSERT INTO cycles (user_id, start_date, end_date, flow_level, notes) VALUES
