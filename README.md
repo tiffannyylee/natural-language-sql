@@ -231,33 +231,57 @@ Strategy: zero-shot<br/>
 Model: gpt-4o
 
 Question:<br/>
-<!-- TODO: add a question -->
+What supplements does Maria take on which days?
 
 Generated SQL:
 ```sqlite
--- TODO: paste generated SQL here
+  SELECT m.name, ml.log_date 
+FROM medication_logs ml
+JOIN medications m ON ml.medication_id = m.id
+JOIN users u ON ml.user_id = u.id
+WHERE LOWER(m.type) = LOWER('supplement') AND u.name LIKE 'Maria%'
 ```
 
 Query Results:<br/>
-<!-- TODO: paste results here -->
+  Columns: ['name', 'log_date']
+  ('Magnesium', '2025-11-15')
+  ('Magnesium', '2025-11-16')
+  ('Magnesium', '2025-11-28')
 
 Herra says:<br/>
-<!-- TODO: paste response here -->
+  Hi there! It looks like Maria has been taking Magnesium as a supplement, specifically on November 15th, 16th, and 28th, 2025. 
+
+Magnesium is a great choice for various health benefits, including supporting muscle and nerve function, as well as bone health. If you've noticed any changes or improvements in how you feel on the days you take it, that could be useful information to share with a healthcare provider.
+
+If you’re using Magnesium for a specific reason, or if you have any questions about its effects or how often you should be taking it, it might be a good idea to chat with your doctor. They can provide personalized advice based on your health needs.
+
+Feel free to reach out if you have more questions or need further assistance! 😊
 
 #### Example 6
 Strategy: zero-shot<br/>
 Model: gpt-4o
 
 Question:<br/>
-<!-- TODO: add a question -->
+Which symptoms does Priya log most?
 
 Generated SQL:
 ```sqlite
--- TODO: paste generated SQL here
+  SELECT s.name, COUNT(sl.id) AS log_count
+FROM symptom_logs sl
+JOIN users u ON sl.user_id = u.id
+JOIN symptoms s ON sl.symptom_id = s.id
+WHERE u.name LIKE 'Priya%'
+GROUP BY s.name
+ORDER BY log_count DESC
+LIMIT 1;
 ```
 
 Query Results:<br/>
-<!-- TODO: paste results here -->
-
+  Columns: ['name', 'log_count']
+  ('Cramps', 6)
 Herra says:<br/>
-<!-- TODO: paste response here -->
+  Hi there! It looks like Priya has been logging "Cramps" as her most frequent symptom, with a total of 6 entries. It's great that she's keeping track of this because it can help in understanding her patterns better.
+
+Cramps can be a common part of the menstrual cycle for many, but if she's finding them particularly uncomfortable or if they're impacting her daily life, it might be worth discussing with a healthcare professional. They can provide insights or suggest ways to manage them better.
+
+Keep encouraging Priya to log her symptoms regularly. It’s a helpful way to notice any changes or patterns over time. If there are any other symptoms she's concerned about, feel free to log those as well, and we're here to help make sense of the data whenever you need! 😊
